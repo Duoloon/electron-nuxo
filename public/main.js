@@ -1,5 +1,5 @@
 const { app, BrowserWindow, Menu, ipcMain } = require('electron')
-//const { autoUpdater } = require('electron-updater')
+const { autoUpdater } = require('electron-updater')
 const path = require('path')
 const isDev = require('electron-is-dev')
 const WindowStateManager = require('electron-window-state-manager')
@@ -57,9 +57,8 @@ function createWindow() {
       // preload: path.join(__dirname, "preload.js"),
     }
   })
-  
-  // win.setMenu(null)
-
+   
+  // !isDev && win.setMenu(null)
   win.loadURL(
     isDev
       ? 'http://localhost:3000'
@@ -69,7 +68,7 @@ function createWindow() {
 
 app.on('ready', () => {
   createWindow()
-  //autoUpdater.checkForUpdatesAndNotify()
+  autoUpdater.checkForUpdatesAndNotify()
 
   if (mainWindowState.maximized) {
     win.maximize()
@@ -96,7 +95,7 @@ app.on('activate', function () {
   if (BrowserWindow.getAllWindows().length === 0) createWindow()
 })
 
-/* autoUpdater.on('checking-for-update', () => {
+autoUpdater.on('checking-for-update', () => {
   sendStatusToWindow('message', 'Verificando Actualización...')
 })
 autoUpdater.on('update-available', info => {
@@ -124,5 +123,5 @@ ipcMain.on('restart_app', (event, arg) => {
 
 ipcMain.on('update_app', (event, arg) => {
   autoUpdater.checkForUpdates()
-}) */
+})
 const server = require('./server')
