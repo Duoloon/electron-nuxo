@@ -19,10 +19,17 @@ const invoiceElectronic = async (data, user) => {
     // ---------- INGRESANDO A LA PÁGINA -------------------
     const page = await browser.newPage();
     page.setDefaultTimeout(120000);
-    await page.goto('https://homer.sii.cl/');
-    await page.click('#sinAutenticacion > li > a');
+    // await page.goto('https://homer.sii.cl/');
+    // await page.click('#sinAutenticacion > li > a');
+    
+    // ----------- SISTEMA DE FACTURACIÓN GRATUITO -------------
+    await page.goto('https://www.sii.cl/servicios_online/1039-1183.html', { waitUntil: 'networkidle2' });
+    const firstSelect = await page.waitForSelector('#headingOne > h4 > a');
+    await firstSelect.click();
+    await page.click('#menu-inicio-actividades > li:nth-child(2) > a');
 
-    // -------------- INICIO DE SESION --------------------
+    // --------------- INICIO DE SESION --------------------
+    // await page.waitForTimeout(2000);
     const rutInput = await page.waitForSelector('#rutcntr');
     const passwordInput = await page.waitForSelector('#clave');
     await rutInput.type(user.rut);
@@ -30,13 +37,16 @@ const invoiceElectronic = async (data, user) => {
     await page.waitForTimeout(2000);
     await page.click('#bt_ingresar');
 
-    // ----------- SISTEMA DE FACTURACIÓN GRATUITO -------------
+    // ------------- COMPROBAR RUT -------------------------
     await page.waitForTimeout(2000);
-    await page.goto('https://www.sii.cl/servicios_online/1039-1183.html', { waitUntil: 'networkidle2' });
+    const otherRut = await page.waitForSelector('#my-wrapper > div.web-sii.cuerpo > div > p:nth-child(4) > a:nth-child(1)');
 
-    const firstSelect = await page.waitForSelector('#headingOne > h4 > a');
-    await firstSelect.click();
-    await page.click('#menu-inicio-actividades > li:nth-child(2) > a');
+    if (otherRut) {
+      await otherRut.click();
+      await page.waitForTimeout(2000);
+      await page.select('#fPrmEmpPOP > div > div.col-sm-8.col-sm-offset-2 > div > div > select', data.otherRut);
+      await page.click('#fPrmEmpPOP > div > div.col-sm-12.text-center > button');
+    }
 
     // ---------------- FACTURA ELECTRONICA --------------------
     await page.waitForTimeout(2000);

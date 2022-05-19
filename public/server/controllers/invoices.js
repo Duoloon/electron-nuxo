@@ -3,7 +3,7 @@ const { DocumentIssued, Product, User } = require('../models');
 const { invoiceElectronic, invoiceNotAffect } = require('../helpers');
 
 const createInvoiceElectronic = async (req, res) => {
-  const user = await User.findOne({ where: { rut: '165939921' } });
+  const user = await User.findOne({ order: [['id', 'DESC']] });
 
   if (!user) {
     return res.status(400).json({ msg: 'No hay un usuario registrado' });
@@ -25,7 +25,8 @@ const createInvoiceElectronic = async (req, res) => {
 };
 
 const createInvoiceNotAffect = async (req, res) => {
-  const user = await User.findOne({ where: { rut: '165939921' } });
+  // const user = await User.findOne({ where: { rut: '165939921' } });
+  const user = await User.findOne({ order: [['id', 'DESC']] });
 
   if (!user) {
     return res.status(400).json({ msg: 'No hay un usuario registrado' });
