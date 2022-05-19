@@ -43,7 +43,7 @@ const invoiceElectronic = async (data, user) => {
 
     if (otherRut) {
       await otherRut.click();
-      await page.waitForTimeout(2000);
+      await page.waitForTimeout(5000);
       await page.select('#fPrmEmpPOP > div > div.col-sm-8.col-sm-offset-2 > div > div > select', data.otherRut);
       await page.click('#fPrmEmpPOP > div > div.col-sm-12.text-center > button');
     }

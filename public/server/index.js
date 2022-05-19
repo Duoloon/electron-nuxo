@@ -1,11 +1,11 @@
 'use strict';
+
 (function () {
-require('dotenv').config();
-const { Server } = require('./models');
+  require('dotenv').config();
+  const { Server } = require('./models');
+  
+  const serverinit = new Server();
+  const server = serverinit.listen();
 
-const serverinit = new Server();
-const server = serverinit.listen();
-
-module.exports = server;
-
-}());
+  module.exports = server;
+})();
